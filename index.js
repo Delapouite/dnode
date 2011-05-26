@@ -13,7 +13,7 @@ exports = module.exports = dnode;
 function dnode (wrapper) {
     if (!(this instanceof dnode)) return new dnode(wrapper);
     
-    this.proto = protocol(wrapper);
+    this.protocol = protocol(wrapper);
     this.stack = [];
     return this;
 }
@@ -89,7 +89,7 @@ dnode.prototype.connect = function () {
     
     function attachDnode() {
       
-        client = createClient(self.proto, stream);
+        client = createClient(self.protocol, stream);
         
         client.end = function () {
             if (params.reconnect) params.reconnect = 0;
@@ -168,7 +168,7 @@ dnode.prototype.listen = function () {
                     ? 'secureConnection' 
                     : 'connection' ;
     server.on(listenFor, (function (stream) {
-        var client = createClient(this.proto, stream);
+        var client = createClient(this.protocol, stream);
         clients[client.id] = client;
         
         this.stack.forEach(function (middleware) {
@@ -192,8 +192,8 @@ dnode.prototype.listen = function () {
     return this;
 };
 
-function createClient (proto, stream) {
-    var client = proto.create();
+function createClient (protocol, stream) {
+    var client = protocol.create();
     
     process.nextTick(function () {
         if (client.listeners('error').length === 0) {
@@ -228,9 +228,9 @@ function createClient (proto, stream) {
 }
 
 dnode.prototype.end = function () {
-    Object.keys(this.proto.sessions)
+    Object.keys(this.protocol.sessions)
         .forEach((function (id) {
-            this.proto.sessions[id].stream.end()
+            this.protocol.sessions[id].stream.end()
         }).bind(this))
     ;
     this.emit('end');
