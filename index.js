@@ -136,18 +136,14 @@ dnode.prototype.listen = function () {
                 rejectUnauthorized: params.rejectUnauthorized
             };
             server = tls.createServer(options);
-            server.listen(
-                params.port, params.host,
-                this.emit.bind(this, 'ready')
-            );
         }
         else {
             server = net.createServer();
-            server.listen(
-                params.port, params.host,
-                this.emit.bind(this, 'ready')
-            );
         }
+        server.listen(
+            params.port, params.host,
+            this.emit.bind(this, 'ready')
+        );
     }
     else if (server && server instanceof http.Server
     || 'httpAllowHalfOpen' in server || params.webserver) {
