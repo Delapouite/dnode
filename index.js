@@ -29,7 +29,7 @@ dnode.prototype.connect = function () {
     var params = protocol.parseArgs(arguments);
     var stream = params.stream;
     var client = null;
-    var self   = this;  
+    var self   = this;
     
     if (params.port) {
         params.host = params.host || '127.0.0.1';
@@ -42,7 +42,7 @@ dnode.prototype.connect = function () {
         else {
             stream = net.createConnection(params.port, params.host);
             stream.on('connect', function() {
-                attachDnode();              
+                attachDnode();
             });
         }
     }
